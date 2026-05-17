@@ -21,6 +21,42 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const sessionId = sessionStorage.getItem("autonest_session_id");
+      if (sessionId) {
+        try {
+          const base = process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000`;
+          const response = await fetch(`${base}/api/chat/history/${sessionId}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.messages && data.messages.length > 0) {
+              setMessages([
+                { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?' },
+                ...data.messages
+              ]);
+            }
+          }
+        } catch (e) {
+          console.error("Error fetching chat history:", e);
+        }
+      } else {
+        // Initialize session ID if it doesn't exist
+        const newSessionId = crypto.randomUUID();
+        sessionStorage.setItem("autonest_session_id", newSessionId);
+      }
+    };
+    fetchHistory();
+  }, []);
+
+  const handleNewChat = () => {
+    const newSessionId = crypto.randomUUID();
+    sessionStorage.setItem("autonest_session_id", newSessionId);
+    setMessages([
+      { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?' }
+    ]);
+  };
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -30,6 +66,12 @@ export default function Chatbot() {
     setInput('');
     setIsLoading(true);
 
+    let sessionId = sessionStorage.getItem("autonest_session_id");
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      sessionStorage.setItem("autonest_session_id", sessionId);
+    }
+
     try {
       // Use deployed Render backend, fallback to localhost for local dev
       const base = process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000`;
@@ -38,7 +80,7 @@ export default function Chatbot() {
       const response = await fetch(backendUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage })
+        body: JSON.stringify({ message: userMessage, session_id: sessionId })
       });
 
       if (response.ok) {
@@ -110,8 +152,15 @@ export default function Chatbot() {
       
       {isOpen && (
         <div className="chatbot-window">
-          <div className="chatbot-header">
-            <h3>AutoNest Concierge</h3>
+          <div className="chatbot-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ margin: 0 }}>AutoNest Concierge</h3>
+            <button 
+              onClick={handleNewChat}
+              title="Start New Chat"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', padding: '0 5px' }}
+            >
+              🔄
+            </button>
           </div>
           <div className="chatbot-messages">
             {messages.map((msg, idx) => (
