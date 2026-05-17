@@ -209,7 +209,7 @@ export default function Chatbot() {
             ))}
             {isLoading && (
               <div className="message assistant">
-                <div className="message-content typing">...</div>
+                <div className="message-content typing">🤔 Thinking...</div>
               </div>
             )}
             <div ref={messagesEndRef} />
