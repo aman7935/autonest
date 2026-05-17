@@ -202,6 +202,9 @@ export default function Chatbot() {
           <div className="chatbot-messages">
             {messages.map((msg, idx) => (
               <div key={idx} className={`message ${msg.role}`}>
+                {msg.role === 'assistant' && (
+                  <div className="ai-avatar" title="AutoNest AI">👨‍💼</div>
+                )}
                 <div className="message-content">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
@@ -209,7 +212,8 @@ export default function Chatbot() {
             ))}
             {isLoading && (
               <div className="message assistant">
-                <div className="message-content typing">🤔 Thinking...</div>
+                <div className="ai-avatar" title="Thinking...">🤔</div>
+                <div className="message-content typing">Thinking...</div>
               </div>
             )}
             <div ref={messagesEndRef} />
