@@ -13,7 +13,9 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeBrand, setActiveBrand] = useState('All');
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
   const observerRef = useRef(null);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -152,7 +154,17 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="inventory-grid">
+        <div
+          className="inventory-grid"
+          ref={gridRef}
+          onScroll={() => {
+            const grid = gridRef.current;
+            if (!grid) return;
+            const cardWidth = grid.querySelector('.car-card')?.offsetWidth + 19 || 1; // 19 = gap
+            const index = Math.round(grid.scrollLeft / cardWidth);
+            setActiveCardIndex(index);
+          }}
+        >
           {filteredInventory.map((car) => (
             <div key={car.id} className="car-card">
               <div className="car-image-wrapper">
@@ -175,6 +187,24 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Scroll Dot Indicators */}
+        <div className="scroll-dots">
+          {filteredInventory.map((_, i) => (
+            <button
+              key={i}
+              className={`scroll-dot ${i === activeCardIndex ? 'active' : ''}`}
+              aria-label={`Go to car ${i + 1}`}
+              onClick={() => {
+                const grid = gridRef.current;
+                if (!grid) return;
+                const card = grid.querySelectorAll('.car-card')[i];
+                card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                setActiveCardIndex(i);
+              }}
+            />
           ))}
         </div>
       </section>

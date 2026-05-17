@@ -31,8 +31,9 @@ export default function Chatbot() {
     setIsLoading(true);
 
     try {
-      // Dynamically get the current hostname (localhost or IP address)
-      const backendUrl = `http://${window.location.hostname}:8000/api/chat/stream`;
+      // Use deployed Render backend, fallback to localhost for local dev
+      const base = process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000`;
+      const backendUrl = `${base}/api/chat/stream`;
       
       const response = await fetch(backendUrl, {
         method: 'POST',
@@ -94,7 +95,7 @@ export default function Chatbot() {
       }
     } catch (error) {
       setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble connecting to my brain (the local server). Please try again later." }]);
+        setMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble connecting to the server. Please try again in a moment." }]);
       }, 1000);
     } finally {
       setIsLoading(false);

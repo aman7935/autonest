@@ -1154,38 +1154,98 @@ footer {
     .footer-content { grid-template-columns: 1fr; gap: 3rem; }
 }
 
+/* Scroll Dot Indicators — hidden on desktop, shown on mobile */
+.scroll-dots { display: none; }
+.scroll-dot { border: none; cursor: pointer; padding: 0; background: none; }
+
 @media (max-width: 768px) {
+
     /* Layout Stacking */
     .vdp-specs-list, .vdp-features-list, .testimonials-grid {
         grid-template-columns: 1fr;
     }
 
-    /* Horizontal Scrolling for Cars */
-    .inventory-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 1rem;
-        padding-bottom: 1.5rem;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .inventory-grid::-webkit-scrollbar {
-        height: 6px;
-    }
-    
-    .inventory-grid::-webkit-scrollbar-thumb {
-        background: var(--accent);
-        border-radius: 4px;
+    /* ── Horizontal Car Scroll – Mobile ── */
+    .inventory-section {
+        padding-left: 0;
+        padding-right: 0;
     }
 
-    /* Force visibility on mobile and size for horizontal scroll */
+    .inventory-section .section-header,
+    .inventory-section .filters-bar {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .inventory-grid {
+        display: flex;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 1.2rem;
+        padding: 0.5rem 5% 2rem;
+        /* Peek: show edge of next card */
+        padding-right: 12%;
+        /* Hide scrollbar — clean native feel */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .inventory-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Car Cards — snap & peek */
     .car-card {
-        min-width: 85vw;
-        scroll-snap-align: center;
+        min-width: 78vw;
+        max-width: 78vw;
+        scroll-snap-align: start;
         flex: 0 0 auto;
         opacity: 1 !important;
         transform: translateY(0) !important;
+        border-radius: 12px;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Subtle scale-down on non-active cards via :has sibling trick not needed –
+       instead give active card a gold glow via JS-free CSS approach */
+    .car-card:active {
+        transform: scale(0.98);
+    }
+
+    /* Scroll hint label */
+    .inventory-section .section-header::after {
+        content: 'Swipe to explore →';
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.72rem;
+        color: var(--accent);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    /* Dot track below grid */
+    .scroll-dots {
+        display: flex !important;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .scroll-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .scroll-dot.active {
+        width: 20px;
+        border-radius: 4px;
+        background: var(--accent);
     }
 
     /* Typography Scaling */
@@ -1258,5 +1318,13 @@ footer {
         width: 100%;
         max-height: 90vh;
         overflow-y: auto;
+    }
+
+    /* Book a Test Drive Button - Mobile Size */
+    .navbar .btn-primary {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
     }
 }
