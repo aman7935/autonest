@@ -107,14 +107,11 @@ export default function Chatbot() {
       });
 
       if (response.ok) {
-        setIsLoading(false); // Stop loading animation immediately once stream starts
-        // Add an empty assistant message to the chat
-        setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
-
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
         let assistantMessage = '';
+        let isFirstChunk = true;
 
         while (true) {
           const { value, done } = await reader.read();
@@ -129,33 +126,27 @@ export default function Chatbot() {
               const dataString = event.slice(6);
               if (dataString.trim() === "[DONE]") continue;
               
+              let chunkText = "";
               try {
                 const parsedData = JSON.parse(dataString);
-                // Extract content (or response, depending on what the backend exactly sends)
-                const word = parsedData.content || parsedData.response || "";
-                
-                if (word) {
+                chunkText = parsedData.content || parsedData.response || "";
+              } catch (e) {
+                chunkText = dataString;
+              }
+
+              if (chunkText) {
+                if (isFirstChunk) {
+                  setIsLoading(false); // Remove typing indicator now that we have text
+                  isFirstChunk = false;
+                  assistantMessage += chunkText;
+                  // Push the first word to the chat history
+                  setMessages(prev => [...prev, { role: 'assistant', content: assistantMessage }]);
+                } else {
                   // Artificially delay by 40ms per word to create a readable typing effect
                   await new Promise(resolve => setTimeout(resolve, 40));
-                  
-                  assistantMessage += word;
+                  assistantMessage += chunkText;
                   
                   // Update the last message in the array with the new chunk
-                  setMessages(prev => {
-                    const newMessages = [...prev];
-                    newMessages[newMessages.length - 1] = { 
-                      role: 'assistant', 
-                      content: assistantMessage 
-                    };
-                    return newMessages;
-                  });
-                }
-              } catch (e) {
-                // If parsing fails, it might be raw text, append it directly
-                if (dataString) {
-                  await new Promise(resolve => setTimeout(resolve, 40));
-                  assistantMessage += dataString;
-                  
                   setMessages(prev => {
                     const newMessages = [...prev];
                     newMessages[newMessages.length - 1] = { 
@@ -168,6 +159,11 @@ export default function Chatbot() {
               }
             }
           }
+        }
+        
+        // Failsafe if stream ends empty
+        if (isFirstChunk) {
+          setIsLoading(false);
         }
       } else {
         setIsLoading(false);
