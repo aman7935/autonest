@@ -133,20 +133,38 @@ export default function Chatbot() {
                 const parsedData = JSON.parse(dataString);
                 // Extract content (or response, depending on what the backend exactly sends)
                 const word = parsedData.content || parsedData.response || "";
-                assistantMessage += word;
                 
-                // Update the last message in the array with the new chunk
-                setMessages(prev => {
-                  const newMessages = [...prev];
-                  newMessages[newMessages.length - 1] = { 
-                    role: 'assistant', 
-                    content: assistantMessage 
-                  };
-                  return newMessages;
-                });
+                if (word) {
+                  // Artificially delay by 40ms per word to create a readable typing effect
+                  await new Promise(resolve => setTimeout(resolve, 40));
+                  
+                  assistantMessage += word;
+                  
+                  // Update the last message in the array with the new chunk
+                  setMessages(prev => {
+                    const newMessages = [...prev];
+                    newMessages[newMessages.length - 1] = { 
+                      role: 'assistant', 
+                      content: assistantMessage 
+                    };
+                    return newMessages;
+                  });
+                }
               } catch (e) {
                 // If parsing fails, it might be raw text, append it directly
-                assistantMessage += dataString;
+                if (dataString) {
+                  await new Promise(resolve => setTimeout(resolve, 40));
+                  assistantMessage += dataString;
+                  
+                  setMessages(prev => {
+                    const newMessages = [...prev];
+                    newMessages[newMessages.length - 1] = { 
+                      role: 'assistant', 
+                      content: assistantMessage 
+                    };
+                    return newMessages;
+                  });
+                }
               }
             }
           }
