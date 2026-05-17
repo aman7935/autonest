@@ -2,6 +2,17 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
+const generateUUID = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -10,6 +21,18 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // Prevent background scrolling when chatbot is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const scrollToBottom = () => {
     // Using 'auto' instead of 'smooth' prevents severe stuttering on mobile 
@@ -42,7 +65,7 @@ export default function Chatbot() {
         }
       } else {
         // Initialize session ID if it doesn't exist
-        const newSessionId = crypto.randomUUID();
+        const newSessionId = generateUUID();
         sessionStorage.setItem("autonest_session_id", newSessionId);
       }
     };
@@ -50,7 +73,7 @@ export default function Chatbot() {
   }, []);
 
   const handleNewChat = () => {
-    const newSessionId = crypto.randomUUID();
+    const newSessionId = generateUUID();
     sessionStorage.setItem("autonest_session_id", newSessionId);
     setMessages([
       { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?' }
@@ -68,7 +91,7 @@ export default function Chatbot() {
 
     let sessionId = sessionStorage.getItem("autonest_session_id");
     if (!sessionId) {
-      sessionId = crypto.randomUUID();
+      sessionId = generateUUID();
       sessionStorage.setItem("autonest_session_id", sessionId);
     }
 

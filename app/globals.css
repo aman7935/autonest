@@ -750,9 +750,9 @@ footer {
 
 .chatbot-window {
     width: 550px;
-    height: 80vh;
-    max-height: 900px;
-    min-height: 600px;
+    height: 70vh;
+    max-height: 800px;
+    min-height: 500px;
     background: rgba(15, 15, 15, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
@@ -1280,7 +1280,7 @@ footer {
         position: fixed !important;
         bottom: 20px !important;
         right: 20px !important;
-        z-index: 99999 !important;
+        z-index: 9999999 !important;
         width: 60px !important;
         height: 60px !important;
     }
@@ -1289,9 +1289,10 @@ footer {
         display: flex !important;
         position: fixed !important;
         top: 10vh !important;
+        bottom: 100px !important;
+        height: auto !important;
         left: 5vw !important;
         width: 90vw !important;
-        height: 75vh !important;
         background: rgba(10, 10, 10, 0.98) !important;
         border: 1px solid var(--accent) !important;
         z-index: 999999 !important;
