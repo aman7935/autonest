@@ -16,13 +16,11 @@ const generateUUID = () => {
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?', temperature: null }
+    { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isResponding, setIsResponding] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [temperature, setTemperature] = useState(0.85);
   const messagesEndRef = useRef(null);
 
   // Prevent background scrolling when chatbot is open, only on mobile devices
@@ -86,7 +84,7 @@ export default function Chatbot() {
     const newSessionId = generateUUID();
     sessionStorage.setItem("autonest_session_id", newSessionId);
     setMessages([
-      { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?', temperature: null }
+      { role: 'assistant', content: 'Hello! I am your AutoNest AI assistant. How can I help you find your dream car today?' }
     ]);
   };
 
@@ -106,9 +104,6 @@ export default function Chatbot() {
       sessionStorage.setItem("autonest_session_id", sessionId);
     }
 
-    // Keep reference to the active temperature for this exchange
-    const activeTemperature = temperature;
-
     try {
       // Use deployed Render backend, fallback to localhost for local dev
       const base = process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000`;
@@ -117,11 +112,7 @@ export default function Chatbot() {
       const response = await fetch(backendUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          message: userMessage, 
-          session_id: sessionId,
-          temperature: activeTemperature 
-        })
+        body: JSON.stringify({ message: userMessage, session_id: sessionId })
       });
 
       if (response.ok) {
@@ -158,11 +149,7 @@ export default function Chatbot() {
                   isFirstChunk = false;
                   assistantMessage += chunkText;
                   // Push the first word to the chat history
-                  setMessages(prev => [...prev, { 
-                    role: 'assistant', 
-                    content: assistantMessage,
-                    temperature: activeTemperature 
-                  }]);
+                  setMessages(prev => [...prev, { role: 'assistant', content: assistantMessage }]);
                 } else {
                   // Artificially delay by 40ms per word to create a readable typing effect
                   await new Promise(resolve => setTimeout(resolve, 40));
@@ -173,8 +160,7 @@ export default function Chatbot() {
                     const newMessages = [...prev];
                     newMessages[newMessages.length - 1] = { 
                       role: 'assistant', 
-                      content: assistantMessage,
-                      temperature: activeTemperature
+                      content: assistantMessage 
                     };
                     return newMessages;
                   });
@@ -215,69 +201,14 @@ export default function Chatbot() {
         <div className="chatbot-window">
           <div className="chatbot-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ margin: 0 }}>AutoNest Concierge</h3>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button 
-                onClick={() => setShowSettings(!showSettings)}
-                title="Toggle Creativity Controls"
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  cursor: 'pointer', 
-                  fontSize: '1.2rem', 
-                  padding: '0 5px',
-                  opacity: showSettings ? 1 : 0.7,
-                  transition: 'opacity 0.2s'
-                }}
-              >
-                ⚙️
-              </button>
-              <button 
-                onClick={handleNewChat}
-                title="Start New Chat"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', padding: '0 5px' }}
-              >
-                🔄
-              </button>
-            </div>
+            <button 
+              onClick={handleNewChat}
+              title="Start New Chat"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', padding: '0 5px' }}
+            >
+              🔄
+            </button>
           </div>
-          
-          {showSettings && (
-            <div className="chatbot-settings" style={{
-              padding: '12px 15px',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              background: 'rgba(0, 0, 0, 0.2)',
-              backdropFilter: 'blur(5px)',
-              fontSize: '0.85rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Response Style:</span>
-                <strong style={{ color: '#d4af37' }}>
-                  {temperature.toFixed(2)} {temperature <= 0.4 ? '❄️ Precise' : temperature <= 0.8 ? '🎯 Balanced' : '🔥 Creative'}
-                </strong>
-              </div>
-              <input 
-                type="range" 
-                min="0.1" 
-                max="1.5" 
-                step="0.05" 
-                value={temperature}
-                onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                style={{
-                  width: '100%',
-                  accentColor: '#d4af37',
-                  cursor: 'pointer',
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  height: '4px',
-                  borderRadius: '2px',
-                  outline: 'none'
-                }}
-              />
-            </div>
-          )}
-
           <div className="chatbot-messages">
             {messages.map((msg, idx) => (
               <div key={idx} className={`message ${msg.role}`}>
@@ -286,22 +217,6 @@ export default function Chatbot() {
                 )}
                 <div className="message-content">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
-                  {msg.role === 'assistant' && msg.temperature !== undefined && msg.temperature !== null && (
-                    <div className="message-temperature" style={{
-                      fontSize: '0.7rem',
-                      color: 'rgba(255, 255, 255, 0.4)',
-                      marginTop: '6px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                      paddingTop: '4px'
-                    }}>
-                      <span>Temp: {msg.temperature}</span>
-                      <span>•</span>
-                      <span>{msg.temperature <= 0.4 ? '❄️ Precise' : msg.temperature <= 0.8 ? '🎯 Balanced' : '🔥 Creative'}</span>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
