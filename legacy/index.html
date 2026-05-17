@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoNest | Luxury Pre-Owned Vehicles</title>
+    <meta name="description" content="AutoNest offers the finest selection of premium second-hand luxury vehicles, including Mercedes, Audi, and BMW.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Auto<span>Nest</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#inventory">Inventory</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="btn-primary" id="nav-contact-btn">Book a Test Drive</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Elevate Your Journey</h1>
+            <p>Discover our meticulously curated collection of high-end pre-owned vehicles. Experience luxury without compromise.</p>
+            <a href="#inventory" class="btn-primary large">Explore Collection</a>
+        </div>
+    </header>
+
+    <!-- Inventory Section -->
+    <section id="inventory" class="inventory-section">
+        <div class="section-header">
+            <h2>Premium Selection</h2>
+            <p>Our exclusive hand-picked luxury cars</p>
+        </div>
+
+        <div class="inventory-grid">
+            <!-- Car Card 1 -->
+            <div class="car-card">
+                <div class="car-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80" alt="Mercedes-Benz AMG GT" class="car-img" loading="lazy">
+                    <div class="car-badge">Mercedes-Benz</div>
+                </div>
+                <div class="car-info">
+                    <h3>AMG GT R</h3>
+                    <div class="car-specs">
+                        <span><i class="icon">📅</i> 2021</span>
+                        <span><i class="icon">🛣️</i> 12,500 mi</span>
+                        <span><i class="icon">⛽</i> V8 BiTurbo</span>
+                    </div>
+                    <div class="car-footer">
+                        <div class="price">$145,000</div>
+                        <button class="btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 2 -->
+            <div class="car-card">
+                <div class="car-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=800&q=80" alt="Audi R8" class="car-img" loading="lazy">
+                    <div class="car-badge">Audi</div>
+                </div>
+                <div class="car-info">
+                    <h3>R8 V10 Performance</h3>
+                    <div class="car-specs">
+                        <span><i class="icon">📅</i> 2022</span>
+                        <span><i class="icon">🛣️</i> 8,200 mi</span>
+                        <span><i class="icon">⛽</i> 5.2L V10</span>
+                    </div>
+                    <div class="car-footer">
+                        <div class="price">$168,500</div>
+                        <button class="btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 3 -->
+            <div class="car-card">
+                <div class="car-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80" alt="BMW M8" class="car-img" loading="lazy">
+                    <div class="car-badge">BMW</div>
+                </div>
+                <div class="car-info">
+                    <h3>M8 Competition</h3>
+                    <div class="car-specs">
+                        <span><i class="icon">📅</i> 2023</span>
+                        <span><i class="icon">🛣️</i> 5,000 mi</span>
+                        <span><i class="icon">⛽</i> 4.4L V8</span>
+                    </div>
+                    <div class="car-footer">
+                        <div class="price">$135,000</div>
+                        <button class="btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Car Card 4 -->
+            <div class="car-card">
+                <div class="car-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80" alt="Mercedes-Benz S-Class" class="car-img" loading="lazy">
+                    <div class="car-badge">Mercedes-Benz</div>
+                </div>
+                <div class="car-info">
+                    <h3>S-Class 580</h3>
+                    <div class="car-specs">
+                        <span><i class="icon">📅</i> 2022</span>
+                        <span><i class="icon">🛣️</i> 15,300 mi</span>
+                        <span><i class="icon">⛽</i> 4.0L V8</span>
+                    </div>
+                    <div class="car-footer">
+                        <div class="price">$112,000</div>
+                        <button class="btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Car Card 5 -->
+            <div class="car-card">
+                <div class="car-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=800&q=80" alt="BMW X5" class="car-img" loading="lazy">
+                    <div class="car-badge">BMW</div>
+                </div>
+                <div class="car-info">
+                    <h3>X5 M50i</h3>
+                    <div class="car-specs">
+                        <span><i class="icon">📅</i> 2021</span>
+                        <span><i class="icon">🛣️</i> 22,000 mi</span>
+                        <span><i class="icon">⛽</i> 4.4L V8</span>
+                    </div>
+                    <div class="car-footer">
+                        <div class="price">$78,500</div>
+                        <button class="btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Car Card 6 -->
+            <div class="car-card">
+                <div class="car-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1603569283847-aa295f0d016a?auto=format&fit=crop&w=800&q=80" alt="Audi RS7" class="car-img" loading="lazy">
+                    <div class="car-badge">Audi</div>
+                </div>
+                <div class="car-info">
+                    <h3>RS7 Sportback</h3>
+                    <div class="car-specs">
+                        <span><i class="icon">📅</i> 2023</span>
+                        <span><i class="icon">🛣️</i> 4,100 mi</span>
+                        <span><i class="icon">⛽</i> 4.0L V8</span>
+                    </div>
+                    <div class="car-footer">
+                        <div class="price">$125,000</div>
+                        <button class="btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">Auto<span>Nest</span></div>
+                <p>The premier destination for luxury pre-owned vehicles. Quality, performance, and prestige combined.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#inventory">Inventory</a></li>
+                    <li><a href="#">Financing</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact</h3>
+                <p>📍 100 Prestige Blvd, Auto City, CA</p>
+                <p>📞 +1 (800) 555-NEST</p>
+                <p>✉️ luxury@autonest.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AutoNest. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
