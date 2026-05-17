@@ -871,8 +871,20 @@ footer {
     transition: color 0.3s;
 }
 
-.chatbot-input button:hover {
+.chatbot-input button:hover:not(:disabled) {
     color: var(--accent-hover);
+}
+
+.chatbot-input input:disabled {
+    color: var(--text-secondary);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.chatbot-input button:disabled {
+    color: var(--text-secondary) !important;
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 /* Modal */
