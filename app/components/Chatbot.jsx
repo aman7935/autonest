@@ -22,15 +22,22 @@ export default function Chatbot() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Prevent background scrolling when chatbot is open
+  // Prevent background scrolling when chatbot is open, only on mobile devices
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    const handleScrollLock = () => {
+      if (isOpen && window.innerWidth <= 768) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'unset';
+      }
+    };
+    
+    handleScrollLock();
+    window.addEventListener('resize', handleScrollLock);
+
     return () => {
       document.body.style.overflow = 'unset';
+      window.removeEventListener('resize', handleScrollLock);
     };
   }, [isOpen]);
 
